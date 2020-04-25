@@ -37,7 +37,7 @@ set(SRC_FILES
         $<$<CXX_COMPILER_ID:MSVC>: src/CacheSimWindows.cpp src/PlatformWindows.cpp>
         $<$<CXX_COMPILER_ID:GNU>: src/CacheSimLinux.cpp src/PlatformLinux.cpp>)
 
-set_source_files_properties(../README.md src/CacheSimCommon.inl PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties(src/CacheSimCommon.inl PROPERTIES HEADER_FILE_ONLY TRUE)
 
 add_library(CacheSim SHARED ${SRC_FILES})
 
@@ -54,5 +54,9 @@ target_compile_options(CacheSim
         $<$<CXX_COMPILER_ID:GNU>: -fvisibility=hidden>)
 
 target_link_libraries(CacheSim PUBLIC udis86)
+
+if (UNIX)
+    target_link_libraries(CacheSim PUBLIC ${CMAKE_DL_LIBS})
+endif ()
 
 target_include_directories(CacheSim PUBLIC include)

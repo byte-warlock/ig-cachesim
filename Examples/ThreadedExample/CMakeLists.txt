@@ -23,6 +23,8 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+find_package(Threads REQUIRED)
+
 add_executable(ThreadedExample ThreadedExample.cpp)
 
-target_link_libraries(ThreadedExample PRIVATE CacheSim)
+target_link_libraries(ThreadedExample PRIVATE CacheSim Threads::Threads)
