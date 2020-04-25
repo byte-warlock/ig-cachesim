@@ -26,9 +26,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Precompiled.h"
 
-#include "CacheSim.h"
-#include "CacheSimInternals.h"
-#include "CacheSimData.h"
+#include "../include/CacheSim/CacheSim.h"
+#include "../include/CacheSim/CacheSimInternals.h"
+#include "../include/CacheSim/CacheSimData.h"
 #include "GenericHashTable.h"
 #include "Md5.h"
 

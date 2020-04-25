@@ -75,6 +75,3 @@ void CacheSim::FlatProfileView::filterTextEdited()
 {
   m_FlatProxy->setFilterFixedString(ui->m_FlatFilter->text());
 }
-
-#include "aux_FlatProfileView.moc"
-

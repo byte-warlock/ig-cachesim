@@ -25,86 +25,61 @@
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-set(moc_inputs
-  CacheSimMainWindow.h
-  CacheSimMainWindow.h
-  SymbolResolver.h
-  TraceTab.h
-  TraceData.h
-  FlatModel.h
-  TreeModel.h
-  FlatProfileView.h
-  TreeProfileView.h
-  BaseProfileView.h
-)
-
-foreach(moc_input IN LISTS moc_inputs)
-  get_filename_component(basename "${moc_input}" NAME_WE)
-  list(APPEND moc_output "${CMAKE_CURRENT_BINARY_DIR}/aux_${basename}.moc")
-  qt5_generate_moc("${moc_input}" "${CMAKE_CURRENT_BINARY_DIR}/aux_${basename}.moc")
-endforeach()
-
-set(ui_inputs
-  CacheSimMainWindow.ui
-  TraceTab.ui
-  FlatProfileView.ui
-  TreeProfileView.ui
-)
-
-foreach(ui_input IN LISTS ui_inputs)
-  get_filename_component(basename "${ui_input}" NAME_WE)
-  list(APPEND uic_output "${CMAKE_CURRENT_BINARY_DIR}/ui_${basename}.h")
-  qt5_wrap_ui("${CMAKE_CURRENT_BINARY_DIR}/ui_${basename}.h" "${ui_input}")
-endforeach()
-
+set(CMAKE_AUTOMOC TRUE)
 set(CMAKE_AUTORCC TRUE)
-
-if (WIN32)
-  set(PLATFORM_SRC_FILES SymbolResolverWindows.cpp)
-else (WIN32)
- set(PLATFORM_SRC_FILES SymbolResolverLinux.cpp)
-endif (WIN32)
+set(CMAKE_AUTOUIC TRUE)
 
 add_executable(CacheSimUI WIN32
-  AnnotationView.cpp  AnnotationView.h
-  BaseProfileView.cpp BaseProfileView.h
-  CacheSimGUIMain.cpp
-  CacheSimMainWindow.cpp CacheSimMainWindow.h 
-  FlatModel.cpp FlatModel.h
-  FlatProfileView.cpp FlatProfileView.h
-  NumberFormatters.cpp NumberFormatters.h
-  ObjectStack.cpp ObjectStack.h
-  Precompiled.cpp Precompiled.h
-  TraceData.cpp TraceData.h
-  TraceTab.cpp TraceTab.h
-  TreeModel.cpp TreeModel.h
-  TreeProfileView.cpp TreeProfileView.h
-  ${PLATFORM_SRC_FILES}
+        CacheSimMainWindow.h
+        CacheSimMainWindow.h
+        SymbolResolver.h
+        TraceTab.h
+        TraceData.h
+        FlatModel.h
+        TreeModel.h
+        FlatProfileView.h
+        TreeProfileView.h
+        BaseProfileView.h
 
-  Resources.qrc
+        CacheSimMainWindow.ui
+        TraceTab.ui
+        FlatProfileView.ui
+        TreeProfileView.ui
 
-  ${moc_output}
-  ${uic_output}
-)
+        AnnotationView.cpp AnnotationView.h
+        BaseProfileView.cpp BaseProfileView.h
+        CacheSimGUIMain.cpp
+        CacheSimMainWindow.cpp CacheSimMainWindow.h
+        FlatModel.cpp FlatModel.h
+        FlatProfileView.cpp FlatProfileView.h
+        NumberFormatters.cpp NumberFormatters.h
+        ObjectStack.cpp ObjectStack.h
+        Precompiled.cpp Precompiled.h
+        TraceData.cpp TraceData.h
+        TraceTab.cpp TraceTab.h
+        TreeModel.cpp TreeModel.h
+        TreeProfileView.cpp TreeProfileView.h
+
+        $<$<CXX_COMPILER_ID:MSVC>: SymbolResolverWindows.cpp>
+        $<$<CXX_COMPILER_ID:GNU>: SymbolResolverLinux.cpp>
+
+        Resources.qrc)
+
+target_compile_definitions(CacheSimUI
+        PRIVATE
+        $<$<CXX_COMPILER_ID:MSVC>: "IG_CACHESIM_API=__declspec(dllimport)" "NOMINMAX" "WIN32_LEAN_AND_MEAN" >)
+
+target_compile_options(CacheSimUI
+        PRIVATE
+        $<$<CXX_COMPILER_ID:MSVC>: /W4 /wd4127 /wd4458 /wd4200 /wd4718>)
+
+target_link_libraries(CacheSimUI PRIVATE CacheSim Qt5::Widgets)
 
 if (WIN32)
-  target_compile_definitions(CacheSimUI
-    PRIVATE "IG_CACHESIM_API=__declspec(dllimport)" "NOMINMAX" "WIN32_LEAN_AND_MEAN")
+    target_link_libraries(CacheSimUI PRIVATE "dbghelp")
 
-  target_compile_options(CacheSimUI
-    PRIVATE "/W4" "/wd4127" "/wd4458" "/wd4200" "/wd4718")
-
-  target_link_libraries(CacheSimUI
-    PRIVATE Qt5::Widgets "dbghelp")
-else (WIN32)
-  target_link_libraries(CacheSimUI
-    PRIVATE Qt5::Widgets)
-  target_compile_options(CacheSimUI
-    PRIVATE -g)
-endif (WIN32)
-
-target_include_directories(CacheSimUI
-  PRIVATE "${CMAKE_SOURCE_DIR}" "${CMAKE_CURRENT_BINARY_DIR}")
-
-
-set_target_properties(CacheSimUI PROPERTIES FOLDER "UI")
+    # Post build step to deploy Qt dependencies
+    find_program(WINDEPLOYQT_EXECUTABLE NAMES windeployqt HINTS ${QTDIR} ENV QTDIR PATH_SUFFIXES bin)
+    add_custom_command(TARGET CacheSimUI POST_BUILD
+            COMMAND ${WINDEPLOYQT_EXECUTABLE} $<TARGET_FILE:CacheSimUI>)
+endif ()

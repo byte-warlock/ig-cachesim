@@ -23,23 +23,6 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-add_executable(CacheSimUnitTest
-  TestCacheSim.cpp)
+add_executable(CacheSimUnitTest TestCacheSim.cpp)
 
-
-target_include_directories(CacheSimUnitTest
-  PRIVATE 
-    "${CMAKE_SOURCE_DIR}/googletest/googletest"
-    "${CMAKE_SOURCE_DIR}/googletest/googletest/src"
-    "${CMAKE_SOURCE_DIR}/googletest/googletest/include"
-    "${CMAKE_SOURCE_DIR}")
-
-if (UNIX)
-  target_compile_options(CacheSimUnitTest PRIVATE "-std=c++11" -g -pthread)
-  target_link_libraries(CacheSimUnitTest LINK_PRIVATE CacheSim udis86)
-else (UNIX)
-  target_link_libraries(CacheSimUnitTest CacheSim udis86)
-endif (UNIX)
-
-
-set_target_properties(CacheSimUnitTest PROPERTIES FOLDER "Unit Tests")
+target_link_libraries(CacheSimUnitTest PRIVATE CacheSim gtest)

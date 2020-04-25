@@ -1,5 +1,4 @@
-CacheSim
-========
+# CacheSim
 
 This is CacheSim, a cache simulator developed by Insomniac Games. In its current form it simulates
 an AMD Jaguar cache configuration. It requires a 64-bit Windows machine to work. It has been tested on
@@ -10,38 +9,29 @@ you can check out [this GDC 2017 slide deck](https://deplinenoise.wordpress.com/
 
 The talk is available on the GDC vault with full video as well.
 
-Getting the Source
-------------------
+# Build Instructions
 
-1. Clone this project
-2. `git submodule init`
-3. `git submodule update`
-
-The latter two commands will fetch Google Test which is required to build the unit tests.
-
-Build Instructions
-------------------
+## Windows
 
 You'll need the following:
 
-* Visual Studio 2015
-* CMake
-* Qt 5.7 or later
+* Visual Studio 2015 or later
+* CMake 3.10 or later
+* Qt 5.7 or later, if building the user interface
 
 To build CacheSim:
 
-1. Launch the Qt command line environment
-2. CD into the CacheSim directory
-3. Create a `build` directory: `mkdir build`
-4. Change into this build directory: `cd build`
-5. Run `cmake -G "Visual Studio 14 2015 Win64" ..`
-6. `start CacheSim.sln` to open the solution and build in Visual Studio
+1. Configure and generate the CMake project
+2. Build the project from the generated build files
 
 Note that the only supported build configuration is 64-bit (x64). Bug reports about
 missing 32-bit support will be ignored.
 
-License
--------
+## Linux
+
+Coming soon...
+
+# License
 
     Copyright (c) 2017, Insomniac Games All rights reserved.
 
@@ -66,8 +56,7 @@ License
     OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
     OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Third Party Software
---------------------
+# Third Party Software
 
 CacheSim includes a version of udis86, which has the following license:
 

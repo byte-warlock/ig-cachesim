@@ -24,15 +24,15 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 add_library(udis86 SHARED
-  decode.c
-  itab.c
-  syn.c
-  syn-att.c
-  syn-intel.c
-  udis86.c)
+        src/decode.c
+        src/itab.c
+        src/syn.c
+        src/syn-att.c
+        src/syn-intel.c
+        src/udis86.c)
 
 target_compile_definitions(udis86
-  PUBLIC "_USRDLL"
-  PRIVATE "LIBUDIS86_EXPORTS" "_USRDLL")
+        PUBLIC "_USRDLL"
+        PRIVATE "LIBUDIS86_EXPORTS" "_USRDLL")
 
-set_target_properties(udis86 PROPERTIES FOLDER "CacheSim")
+target_include_directories(udis86 PUBLIC include)

@@ -23,17 +23,6 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-add_executable(HelloWorldExample
-  HelloWorld.cpp)
+add_executable(HelloWorldExample HelloWorld.cpp)
 
-target_include_directories(HelloWorldExample
-  PRIVATE "${CMAKE_SOURCE_DIR}"
-)
-
-if (UNIX)
-  target_compile_options(HelloWorldExample PRIVATE "-std=c++11" -g -pthread)
-  target_link_libraries(HelloWorldExample LINK_PRIVATE dl pthread)
-  set_target_properties(HelloWorldExample PROPERTIES LINK_FLAGS ${LINK_FLAGS} -Wl,--no-as-needed)
-endif (UNIX)
-
-set_target_properties(HelloWorldExample PROPERTIES FOLDER "Examples")
+target_link_libraries(HelloWorldExample PRIVATE CacheSim)

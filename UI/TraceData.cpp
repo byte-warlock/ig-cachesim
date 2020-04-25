@@ -341,6 +341,3 @@ CacheSim::TraceData::ResolveResult CacheSim::TraceData::symbolResolveTask()
 
   return result;
 }
-
-#include "aux_TraceData.moc"
-

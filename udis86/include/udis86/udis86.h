@@ -26,8 +26,8 @@
 #ifndef UDIS86_H
 #define UDIS86_H
 
-#include "types.h"
-#include "extern.h"
-#include "itab.h"
+#include "../../src/types.h"
+#include "../../src/extern.h"
+#include "../../src/itab.h"
 
 #endif

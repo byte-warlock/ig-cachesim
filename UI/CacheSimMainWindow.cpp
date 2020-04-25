@@ -105,5 +105,3 @@ void CacheSim::MainWindow::longTaskFinished(int id)
   --m_TasksRunning;
   QApplication::restoreOverrideCursor();
 }
-
-#include "aux_CacheSimMainWindow.moc"

@@ -228,6 +228,3 @@ int CacheSim::TraceTab::addProfileView(BaseProfileView* view, QString label)
 
   return index;
 }
-
-#include "aux_TraceTab.moc"
-

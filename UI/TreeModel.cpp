@@ -288,5 +288,3 @@ CacheSim::TreeModel::Node* CacheSim::TreeModel::createTree(const TraceData* trac
 
   return root;
 }
-
-#include "aux_TreeModel.moc"

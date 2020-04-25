@@ -68,5 +68,3 @@ void CacheSim::TreeProfileView::filterTextEdited()
 {
   m_FilterProxy->setFilterFixedString(ui->m_Filter->text());
 }
-
-#include "aux_TreeProfileView.moc"

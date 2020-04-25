@@ -23,17 +23,42 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-cmake_minimum_required(VERSION 3.4)
-
+cmake_minimum_required(VERSION 3.10)
 project(CacheSim VERSION 1.0 LANGUAGES C CXX)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+# C++ configuration
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+# Configure build output locations
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+# Build options
+option(BUILD_CACHESIM_TESTS "Build the CacheSim Unit Tests" OFF)
+option(BUILD_CACHESIM_EXAMPLES "Build the CacheSim Example Programs" OFF)
+option(BUILD_CACHESIM_UI "Build the CacheSim User Interface" OFF)
+
+# Dependencies
 add_subdirectory(udis86)
-add_subdirectory(CacheSim)
-add_subdirectory(UI)
-add_subdirectory(UnitTest)
 
-add_subdirectory(Examples)
+# CacheSim
+add_subdirectory(CacheSim)
+
+# Unit tests
+if (BUILD_CACHESIM_TESTS)
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    add_subdirectory(googletest)
+    add_subdirectory(UnitTest)
+endif ()
+
+# Example programs
+if (BUILD_CACHESIM_EXAMPLES)
+    add_subdirectory(Examples)
+endif ()
+
+# User interface
+if (BUILD_CACHESIM_UI)
+    add_subdirectory(UI)
+endif ()

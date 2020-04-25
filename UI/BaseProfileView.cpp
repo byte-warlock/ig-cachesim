@@ -97,5 +97,3 @@ void CacheSim::BaseProfileView::annotateTriggered()
     Q_EMIT annotateSymbol(sym);
   }
 }
- 
-#include "aux_BaseProfileView.moc"

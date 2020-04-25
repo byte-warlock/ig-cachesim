@@ -183,5 +183,3 @@ CacheSim::FlatModel::Node::Node()
 {
   memset(m_Stats, 0, sizeof m_Stats);
 }
-
-#include "aux_FlatModel.moc"

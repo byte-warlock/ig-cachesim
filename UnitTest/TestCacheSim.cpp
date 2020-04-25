@@ -1,5 +1,4 @@
 #include "gtest/gtest.h"
-#include "gtest-all.cc"
 
 #include "CacheSim/CacheSimInternals.h"
 extern "C"

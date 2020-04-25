@@ -22,51 +22,37 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-set(SRC_FILES 
-  CacheSim.h
-  CacheSimCommon.inl
-  CacheSimData.h
-  CacheSimInternals.cpp
-  CacheSimInternals.h
-  GenericHashTable.h
-  Md5.cpp
-  Md5.h
-  Platform.h
-  Precompiled.cpp
-  Precompiled.h
-  ../README.md
-)
+set(SRC_FILES
+        include/CacheSim/CacheSim.h
+        src/CacheSimCommon.inl
+        include/CacheSim/CacheSimData.h
+        src/CacheSimInternals.cpp
+        include/CacheSim/CacheSimInternals.h
+        src/GenericHashTable.h
+        src/Md5.cpp
+        src/Md5.h
+        src/Platform.h
+        src/Precompiled.cpp
+        src/Precompiled.h
+        $<$<CXX_COMPILER_ID:MSVC>: src/CacheSimWindows.cpp src/PlatformWindows.cpp>
+        $<$<CXX_COMPILER_ID:GNU>: src/CacheSimLinux.cpp src/PlatformLinux.cpp>)
 
-set_source_files_properties(../README.md CacheSimCommon.inl PROPERTIES HEADER_FILE_ONLY TRUE)
-
-set(LIB_LIST udis86)
-
-if ( MSVC )
-  set(SRC_FILES ${SRC_FILES} CacheSimWindows.cpp PlatformWindows.cpp)
-else ( MSVC )
-  set(SRC_FILES ${SRC_FILES} CacheSimLinux.cpp PlatformLinux.cpp )
-endif (MSVC)
+set_source_files_properties(../README.md src/CacheSimCommon.inl PROPERTIES HEADER_FILE_ONLY TRUE)
 
 add_library(CacheSim SHARED ${SRC_FILES})
 
-if (MSVC)
-  target_compile_definitions(CacheSim
-    INTERFACE   "IG_CACHESIM_API=__declspec(dllimport)"
-    PRIVATE     "IG_CACHESIM_API=__declspec(dllexport)" "NOMINMAX" "WIN32_LEAN_AND_MEAN" "_CRT_SECURE_NO_WARNINGS")
-  target_compile_options(CacheSim
-    PRIVATE "/W4")
-else (MSVC)
-  set(LIB_LIST ${LIB_LIST} dl pthread)
-  target_compile_options(CacheSim PRIVATE 
-    "-std=c++11" 
-    -g
-    -fvisibility=hidden)
-  target_compile_definitions(CacheSim
-    INTERFACE    ""
-    PRIVATE      "IG_CACHESIM_API=__attribute__ ((visibility (\"default\")))")
-  set(CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} -Wl,-zdefs)
-endif (MSVC)
+target_compile_definitions(CacheSim
+        INTERFACE
+        $<$<CXX_COMPILER_ID:MSVC>: "IG_CACHESIM_API=__declspec(dllimport)" >
+        PRIVATE
+        $<$<CXX_COMPILER_ID:MSVC>: "IG_CACHESIM_API=__declspec(dllexport)" "NOMINMAX" "WIN32_LEAN_AND_MEAN" "_CRT_SECURE_NO_WARNINGS" >
+        $<$<CXX_COMPILER_ID:GNU>: "IG_CACHESIM_API=__attribute__ ((visibility (\"default\")))" >)
 
-target_link_libraries(CacheSim ${LIB_LIST})
-target_include_directories(CacheSim PRIVATE "${CMAKE_SOURCE_DIR}")
-set_target_properties(CacheSim PROPERTIES FOLDER "CacheSim")
+target_compile_options(CacheSim
+        PRIVATE
+        $<$<CXX_COMPILER_ID:MSVC>: /W4>
+        $<$<CXX_COMPILER_ID:GNU>: -fvisibility=hidden>)
+
+target_link_libraries(CacheSim PUBLIC udis86)
+
+target_include_directories(CacheSim PUBLIC include)
